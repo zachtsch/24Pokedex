@@ -1,6 +1,3 @@
-
-
-
 import { Text, View, StyleSheet } from 'react-native';
 
 // You can import supported modules from npm
@@ -12,14 +9,10 @@ import AssetExample from './components/AssetExample';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={styles.paragraph}>
-        The App updates any time we save!
-      </Text>
-      
+      <Text style={styles.paragraph}>The App updates any time we save!</Text>
       <Card>
         <AssetExample />
       </Card>
-      
     </View>
   );
 }
