@@ -9,7 +9,7 @@ import AssetExample from './components/AssetExample';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={styles.paragraph}>The App updates any time we save!</Text>
+      <Text style={styles.paragraph}>ZZTest</Text>
       <Card>
         <AssetExample />
       </Card>
