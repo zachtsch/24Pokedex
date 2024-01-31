@@ -13,7 +13,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>
-        The App updates any time we save!
+        The App updates any time we save! Hello World!
       </Text>
       
       <Card>
