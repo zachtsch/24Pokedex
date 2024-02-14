@@ -1,73 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Button, Text } from 'react-native';
+const Stack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-    fontWeight: 'bold',
-  },
-});
-
-const ListElement = ({ item }) => {
-  const [i, setI] = useState(0);
+const MyStack = () => {
   return (
-    <TouchableOpacity onPress={() => setI(i + 1)}>
-      <Text style={{ ...styles.item, color: i % 2 == 0 ? 'green' : 'red' }}>
-        {i} {item.key}
-      </Text>
-    </TouchableOpacity>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name='Home'
+          component={HomeScreen}
+          options={{ title: 'Welcome' }}
+        />
+        <Stack.Screen name='Profile' component={ProfileScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-const Timer = () => {
-  const [time, setTime] = useState(0);
-  useEffect(() => {
-    let id = setInterval(() => setTime(time + 1), 10);
-
-    return () => clearInterval(id);
-  }, [time]);
-
+const HomeScreen = ({ navigation }) => {
   return (
-    <>
-      <Text></Text>
-      <Text style={{ color: time % 2 == 0 ? 'red' : 'green' }}>{time}</Text>
-    </>
+    <Button
+      title="Go to Jane's profile"
+      onPress={() => navigation.navigate('Profile', { name: 'Jane' })}
+    />
   );
 };
-const FlatListBasics = () => {
-  const [i, setI] = useState(0);
-  return (
-    <View style={styles.container}>
-      <Timer />
-      <FlatList
-        data={[
-          { key: 'Devin' },
-          { key: 'Dan' },
-          { key: 'Dominic' },
-          { key: 'Jackson' },
-          { key: 'James' },
-          { key: 'Joel' },
-          { key: 'John' },
-          { key: 'Jillian' },
-          { key: 'Jimmy' },
-          { key: 'Julie' },
-        ]}
-        renderItem={({ item, index }) => <ListElement item={item} />}
-      />
-    </View>
-  );
+const ProfileScreen = ({ navigation, route }) => {
+  return <Text>This is {route.params.name}'s profile</Text>;
 };
 
-export default FlatListBasics;
+export default MyStack;
