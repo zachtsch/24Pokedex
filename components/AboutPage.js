@@ -50,6 +50,7 @@ const PokemonDetail = ({ pokemonId = 4 }) => {
         {types && <Text style={styles.type}>Type: {types}</Text>}
         <Text>Height: {height / 10} m</Text>
         <Text >Weight: {weight / 10} kg</Text>
+        <Text> HIIIIIIIIIII</Text>
         <Text>{flavorTextEntry?.flavor_text}</Text>
         {/* Navigation here*/}
       </ScrollView>
