@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 
-// Define colors for each Pokémon type
 const typeColors = {
   normal: '#A8A878',
   fire: '#F08030',
@@ -22,15 +21,16 @@ const typeColors = {
   steel: '#B8B8D0',
   fairy: '#EE99AC',
 };
-
+// we will hard code different types exp pokemonid = to test the
 const PokemonDetail = ({ pokemonId = 102 }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  //Can someone please add error handling for this fetch request???
+
   useEffect(() => {
     const fetchPokemonData = async () => {
-      try {
         const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
         const pokemonData = await pokemonResponse.json();
         setPokemon(pokemonData);
@@ -40,12 +40,8 @@ const PokemonDetail = ({ pokemonId = 102 }) => {
         setSpecies(speciesData);
     
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching Pokemon data:', error);
-        setLoading(false); // Set loading to false to handle error state
-      }
     };
-    
+      //calling our
     fetchPokemonData();
   }, [pokemonId]);
 
@@ -53,12 +49,19 @@ const PokemonDetail = ({ pokemonId = 102 }) => {
     return <ActivityIndicator size="large" />;
   }
 
+// this is whhere we are fetching the data
+
   const imageUrl = pokemon?.sprites?.other['official-artwork'].front_default;
   const height = pokemon?.height;
   const weight = pokemon?.weight;
   const types = pokemon?.types.map((typeInfo) => typeInfo.type.name);
-
   const flavorTextEntry = species?.flavor_text_entries.find((entry) => entry.language.name === 'en');
+
+//we have safe view for protecting the top notches on iphones
+//we must have the app scrollable to fit all devices/ ipads tablets ect
+// to do -> add navigation to the pokemon page
+//todo -> figure out why scroll view and safearea view only work when loaded in app.js
+//we need this component to not rely on app.js in any way to be shown ( self contained)
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -75,7 +78,6 @@ const PokemonDetail = ({ pokemonId = 102 }) => {
           ))}
         </View>
         </View>
-
         <Text style={styles.stats}>Height: {height / 10} m</Text>
         <Text style={styles.stats}>Weight: {weight / 10} kg</Text>
         <Text style={styles.description}>{flavorTextEntry?.flavor_text}</Text>
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   imageContainer: {
-   // backgroundColor: '#e0e0e0',
+    backgroundColor: '#e0e0e0',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
