@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
-// we will hard code different types exp pokemonid = to test the
+// we will hard code different types Ids to test our fetch function. This will change later once we connect with the poke list group
 const PokemonDetail = ({ pokemonId = 4 }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
@@ -18,7 +18,7 @@ const PokemonDetail = ({ pokemonId = 4 }) => {
   
       setLoading(false);
     };
-  //calling our
+  //calling our fetch
     fetchPokemonData();
   }, [pokemonId]);
 
@@ -26,15 +26,15 @@ const PokemonDetail = ({ pokemonId = 4 }) => {
     return <ActivityIndicator size="large" />;
   }
 
-// this is whhere we are fetching the data
+
   const imageUrl = pokemon?.sprites?.other['official-artwork'].front_default;
   const height = pokemon?.height;
   const weight = pokemon?.weight;
   const types = pokemon?.types.map((typeInfo) => typeInfo.type.name).join(', ');
   const flavorTextEntry = species?.flavor_text_entries.find((entry) => entry.language.name === 'en');
 // to do -> add navigation to the pokemon page
-//todo -> figure out why scroll view and safearea view only work when loaded in app.js
-//we need this component to not rely on app.js in any way to be shown ( self contained)
+//todo -> figure out why scroll view and safearea view only work when loaded in app.js --solved
+//we need this component to not rely on app.js in any way to be shown ( self contained) --solved
   return (
 
 //we have safe view for protecting the top notches on iphones
