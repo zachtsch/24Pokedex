@@ -6,12 +6,22 @@ import getBackgroundColor from '../lib/get-background-color';
 
 const PokemonCard = ({ name, url }) => {
   const [pokemonData, setPokemonData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
   useEffect(() => {
     const getPokemonData = async () => {
-      const res = await fetch(url);
-      const data = await res.json();
-      setPokemonData(data);
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        setPokemonData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getPokemonData();
@@ -21,6 +31,14 @@ const PokemonCard = ({ name, url }) => {
       }
     };
   }, [name, url]);
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
 
   return (
     <View style={styles.cardContainer}>
