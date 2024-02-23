@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Card } from 'react-native-paper';
 
 import padId from '../lib/pad-id';
 import getBackgroundColor from '../lib/get-background-color';
@@ -25,7 +24,7 @@ const PokemonCard = ({ name, url }) => {
 
   return (
     <View style={styles.cardContainer}>
-      {pokemonData && (
+      {pokemonData ? (
         <View style={styles.imageContainer}>
           <Image
             style={styles.pokemonImage}
@@ -38,6 +37,10 @@ const PokemonCard = ({ name, url }) => {
               {padId(pokemonData.id)}
             </Text>
           </View>
+        </View>
+      ) : (
+        <View style={styles.cardContainer}>
+          <View style={styles.imageContainer}></View>
         </View>
       )}
       <View style={styles.infoContainer}>
@@ -86,6 +89,7 @@ const PokemonCard = ({ name, url }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     height: 250,
+    backgroundColor: 'white',
     padding: 5,
     width: '100%',
     flex: 1,
@@ -93,6 +97,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     margin: 2,
+    borderWidth: 1,
+    borderColor: '#c9c9c9',
+    borderRadius: 10,
   },
   imageContainer: {
     flex: 2,
@@ -100,21 +107,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
   },
   infoContainer: {
     flex: 1,
-    borderWidth: 1,
     justifyContent: 'space-between',
     width: '100%',
-    borderColor: 'black',
   },
   idContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -7,
     right: 0,
-    paddingBottom: 2,
     paddingRight: 4,
   },
   pokemonName: {
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     paddingRight: 4,
     textAlign: 'right',
     textTransform: 'capitalize',
-    fontWeight: '400',
+    fontWeight: '500',
   },
   pokemonImage: {
     width: 145,

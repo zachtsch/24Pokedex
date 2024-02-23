@@ -24,7 +24,12 @@ const PokemonList = () => {
   }, []);
 
   return (
-    <View style={{ height: 500, width: '100%' }}>
+    <View
+      style={{
+        height: 500,
+        width: '100%',
+      }}
+    >
       {pokedexData ? (
         <FlashList
           data={pokedexData}
