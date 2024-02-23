@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet} from 'react-native';
 
 
 import PokemonAboutTemplate from './components/AboutPage'; // Corrected import

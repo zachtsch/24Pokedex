@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, Image,  StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 
 const typeColors = {
   normal: '#A8A878',
