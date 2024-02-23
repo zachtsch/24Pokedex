@@ -9,17 +9,19 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.1.1",
     "expo": "~50.0.4",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.73.2",
     "react-native-paper": "^5.12.3",
     "react-native-web": "~0.19.6",
-    "react-dom": "18.2.0",
-    "@expo/metro-runtime": "~3.1.1"
+    "@shopify/flash-list": "1.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/react": "^18.2.57",
     "prettier": "3.2.4"
   },
   "private": true
