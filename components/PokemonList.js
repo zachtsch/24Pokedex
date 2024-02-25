@@ -2,8 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import PokemonCard from './PokemonCard';
-
-const PokemonList = () => {
+const PokemonList = ({ searchQuery }) => {
   const [pokedexData, setPokedexData] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);

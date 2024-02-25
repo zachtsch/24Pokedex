@@ -1,18 +1,11 @@
-import { Text, View, StyleSheet } from 'react-native';
-
-// You can import supported modules from npm
-import { Card } from 'react-native-paper';
-
-// or any files within the Snack
-import AssetExample from './components/AssetExample';
+import { View, StyleSheet } from 'react-native';
+import PokemonDetail from './components/AboutPage';
+import PokemonList from './components/PokemonList';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={styles.paragraph}>The App updates any time we save!</Text>
-      <Card>
-        <AssetExample />
-      </Card>
+      <PokemonList />
     </View>
   );
 }

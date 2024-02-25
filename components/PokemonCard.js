@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import padId from '../lib/pad-id';
 import getBackgroundColor from '../lib/get-background-color';
@@ -41,7 +41,12 @@ const PokemonCard = ({ name, url }) => {
   }
 
   return (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity
+      style={styles.cardContainer}
+      onPress={() => {
+        console.log('test');
+      }}
+    >
       {pokemonData ? (
         <View style={styles.imageContainer}>
           <Image
@@ -100,7 +105,7 @@ const PokemonCard = ({ name, url }) => {
             ))}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

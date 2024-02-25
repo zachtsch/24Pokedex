@@ -9,28 +9,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-const typeColors = {
-  normal: '#A8A878',
-  fire: '#F08030',
-  water: '#6890F0',
-  electric: '#F8D030',
-  grass: '#78C850',
-  ice: '#98D8D8',
-  fighting: '#C03028',
-  poison: '#A040A0',
-  ground: '#E0C068',
-  flying: '#A890F0',
-  psychic: '#F85888',
-  bug: '#A8B820',
-  rock: '#B8A038',
-  ghost: '#705898',
-  dragon: '#7038F8',
-  dark: '#705848',
-  steel: '#B8B8D0',
-  fairy: '#EE99AC',
-};
+import getBackgroundColor from '../lib/get-background-color';
+import padId from '../lib/pad-id';
+
 // we will hard code different types exp pokemonid = to test the
-const PokemonDetail = ({ pokemonId = 102 }) => {
+const PokemonDetail = ({ pokemonId = 103 }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -81,7 +64,7 @@ const PokemonDetail = ({ pokemonId = 102 }) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
-          <Text style={styles.id}>#{pokemon?.id}</Text>
+          <Text style={styles.id}>{padId(pokemon?.id)}</Text>
           <Image source={{ uri: imageUrl }} style={styles.image} />
           <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
           <View style={styles.typesContainer}>
@@ -90,7 +73,7 @@ const PokemonDetail = ({ pokemonId = 102 }) => {
                 key={index}
                 style={[
                   styles.typeBanner,
-                  { backgroundColor: typeColors[type] },
+                  { backgroundColor: getBackgroundColor(type) },
                 ]}
               >
                 <Text style={styles.typeText}>{type.toUpperCase()}</Text>
