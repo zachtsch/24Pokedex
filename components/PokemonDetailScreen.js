@@ -13,38 +13,44 @@ import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 
 // we will hard code different types exp pokemonid = to test the
-const PokemonDetailScreen = ({ route }) => {
+const PokemonDetailScreen = ({ route, navigation }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
 
-  const { pokemonId } = route.params;
+  const { pokemonId, pokemonName } = route.params;
 
   //Can someone please add error handling for this fetch request???
 
   useEffect(() => {
+    navigation.setOptions({ title: pokemonName.toUpperCase() });
+
     const fetchPokemonData = async () => {
-      const pokemonResponse = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
-      );
-      const pokemonData = await pokemonResponse.json();
-      setPokemon(pokemonData);
+      setIsLoading(true);
+      setError(null);
+      try {
+        const pokemonResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+        );
+        const pokemonData = await pokemonResponse.json();
+        setPokemon(pokemonData);
 
-      const speciesResponse = await fetch(
-        `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`,
-      );
-      const speciesData = await speciesResponse.json();
-      setSpecies(speciesData);
-
-      setLoading(false);
+        const speciesResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`,
+        );
+        const speciesData = await speciesResponse.json();
+        setSpecies(speciesData);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
     //calling our
     fetchPokemonData();
-  }, [pokemonId]);
-
-  if (loading) {
-    return <ActivityIndicator size='large' />;
-  }
+  }, [pokemonId, navigation, pokemonName]);
 
   // this is whhere we are fetching the data
 
@@ -64,29 +70,45 @@ const PokemonDetailScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Text style={styles.id}>{padId(pokemon?.id)}</Text>
-          <Image source={{ uri: imageUrl }} style={styles.image} />
-          <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
-          <View style={styles.typesContainer}>
-            {types.map((type, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.typeBanner,
-                  { backgroundColor: getBackgroundColor(type) },
-                ]}
-              >
-                <Text style={styles.typeText}>{type.toUpperCase()}</Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        {isLoading && <ActivityIndicator size='large' />}
+        {error && <Text>Error: {error}</Text>}
+        {!error && !isLoading && (
+          <View style={styles.container}>
+            <View style={styles.imageContainer}>
+              <Text style={styles.id}>{padId(pokemon?.id)}</Text>
+              <Image source={{ uri: imageUrl }} style={styles.image} />
+              <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
+              <View style={styles.typesContainer}>
+                {pokemon &&
+                  types.map((type, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.typeBanner,
+                        { backgroundColor: getBackgroundColor(type) },
+                      ]}
+                    >
+                      <Text style={styles.typeText}>{type.toUpperCase()}</Text>
+                    </View>
+                  ))}
               </View>
-            ))}
+            </View>
+            <Text style={styles.stats}>Height: {height / 10} m</Text>
+            <Text style={styles.stats}>Weight: {weight / 10} kg</Text>
+            <Text style={styles.description}>
+              {flavorTextEntry?.flavor_text}
+            </Text>
           </View>
-        </View>
-        <Text style={styles.stats}>Height: {height / 10} m</Text>
-        <Text style={styles.stats}>Weight: {weight / 10} kg</Text>
-        <Text style={styles.description}>{flavorTextEntry?.flavor_text}</Text>
-      </ScrollView>
+        )}
+      </View>
     </SafeAreaView>
   );
 };

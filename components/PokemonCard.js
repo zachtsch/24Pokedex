@@ -45,7 +45,10 @@ const PokemonCard = ({ name, url, navigation }) => {
       style={styles.cardContainer}
       onPress={() => {
         if (pokemonData) {
-          navigation.navigate('PokemonDetail', { pokemonId: pokemonData.id });
+          navigation.navigate('PokemonDetail', {
+            pokemonId: pokemonData.id,
+            pokemonName: name,
+          });
         }
       }}
     >

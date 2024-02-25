@@ -13,12 +13,12 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name='PokemonList'
-          options={{ headerShown: false }}
+          options={{ title: '', headerShown: false }}
           component={PokemonListScreen}
         />
         <Stack.Screen
           name='PokemonDetail'
-          options={{ headerShown: false }}
+          options={{ headerTransparent: true }}
           component={PokemonDetailScreen}
         />
       </Stack.Navigator>
