@@ -6,6 +6,8 @@ import { Card } from 'react-native-paper';
 // or any files within the Snack
 import AssetExample from './components/AssetExample';
 
+import EvoChain from './components/EvoChain';
+
 export default function App() {
   return (
     <View style={styles.container}>
@@ -13,6 +15,7 @@ export default function App() {
       <Card>
         <AssetExample />
       </Card>
+      <EvoChain />
     </View>
   );
 }
