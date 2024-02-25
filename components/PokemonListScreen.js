@@ -1,11 +1,16 @@
 import { FlashList } from '@shopify/flash-list';
 import { View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import PokemonCard from './PokemonCard';
-const PokemonList = ({ searchQuery }) => {
+
+const PokemonListScreen = ({ searchQuery }) => {
   const [pokedexData, setPokedexData] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getPokedexData = async () => {
@@ -49,7 +54,7 @@ const PokemonList = ({ searchQuery }) => {
   }
 
   return (
-    <View
+    <SafeAreaView
       style={{
         height: '100%',
         width: '100%',
@@ -58,13 +63,17 @@ const PokemonList = ({ searchQuery }) => {
       <FlashList
         data={pokedexData}
         renderItem={(itemData) => (
-          <PokemonCard name={itemData.item.name} url={itemData.item.url} />
+          <PokemonCard
+            name={itemData.item.name}
+            url={itemData.item.url}
+            navigation={navigation}
+          />
         )}
         estimatedItemSize={250}
         numColumns={2}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default PokemonList;
+export default PokemonListScreen;

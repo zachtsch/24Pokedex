@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import padId from '../lib/pad-id';
 import getBackgroundColor from '../lib/get-background-color';
 
-const PokemonCard = ({ name, url }) => {
+const PokemonCard = ({ name, url, navigation }) => {
   const [pokemonData, setPokemonData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -44,7 +44,9 @@ const PokemonCard = ({ name, url }) => {
     <TouchableOpacity
       style={styles.cardContainer}
       onPress={() => {
-        console.log('test');
+        if (pokemonData) {
+          navigation.navigate('PokemonDetail', { pokemonId: pokemonData.id });
+        }
       }}
     >
       {pokemonData ? (

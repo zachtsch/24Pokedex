@@ -1,26 +1,27 @@
-import { View, StyleSheet } from 'react-native';
-import PokemonDetail from './components/AboutPage';
-import PokemonList from './components/PokemonList';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
+import PokemonListScreen from './components/PokemonListScreen';
+import PokemonDetailScreen from './components/PokemonDetailScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <PokemonList />
-    </View>
+    <NavigationContainer>
+      <StatusBar style='auto' />
+      <Stack.Navigator>
+        <Stack.Screen
+          name='PokemonList'
+          options={{ headerShown: false }}
+          component={PokemonListScreen}
+        />
+        <Stack.Screen
+          name='PokemonDetail'
+          options={{ headerShown: false }}
+          component={PokemonDetailScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});

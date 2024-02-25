@@ -13,10 +13,12 @@ import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 
 // we will hard code different types exp pokemonid = to test the
-const PokemonDetail = ({ pokemonId = 103 }) => {
+const PokemonDetailScreen = ({ route }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { pokemonId } = route.params;
 
   //Can someone please add error handling for this fetch request???
 
@@ -148,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PokemonDetail;
+export default PokemonDetailScreen;
