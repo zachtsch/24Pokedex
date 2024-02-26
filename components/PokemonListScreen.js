@@ -75,7 +75,7 @@ const PokemonListScreen = () => {
           <TextInput
             placeholder='Search'
             onChangeText={(query) => {
-              setSearchQuery(query.trim());
+              setSearchQuery(query.trim().toLowerCase());
             }}
           />
         </View>
@@ -88,13 +88,11 @@ const PokemonListScreen = () => {
           data={
             searchQuery === ''
               ? pokedexData
-              : pokedexData.filter(({ name }) => {
-                  return name.startsWith(searchQuery.toLowerCase());
-                })
+              : pokedexData.filter(({ name }) => name.startsWith(searchQuery))
           }
           renderItem={(itemData) => (
             <PokemonCard
-              name={itemData.item.name}
+              name={itemData.item.name.replace('-', ' ')}
               url={itemData.item.url}
               navigation={navigation}
             />

@@ -61,7 +61,7 @@ const PokemonCard = ({ name, url, navigation }) => {
           }}
         >
           <View style={styles.imageContainer}>
-            {currentUrlRef.current !== url ? (
+            {isLoading || currentUrlRef.current !== url ? (
               <ActivityIndicator size='large' />
             ) : (
               <Image
@@ -71,7 +71,7 @@ const PokemonCard = ({ name, url, navigation }) => {
                 style={styles.pokemonImage}
                 allowDownscaling={true}
                 alt={name}
-                transition={1000}
+                transition={500}
               />
             )}
             <View style={styles.idContainer}>

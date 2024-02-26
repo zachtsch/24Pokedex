@@ -12,37 +12,43 @@ import { Image } from 'expo-image';
 
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
-import PokemonCard from './PokemonCard';
 
 const PokemonDetailScreen = ({ route, navigation }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
+  const [pokemonError, setPokemonError] = useState();
+  const [speciesError, setSpeciesError] = useState();
 
   const { pokemonId, pokemonName } = route.params;
 
   useEffect(() => {
-    navigation.setOptions({ title: pokemonName.toUpperCase() });
+    navigation.setOptions({
+      title: pokemonName.replace('-', ' ').toUpperCase(),
+    });
 
     const fetchPokemonData = async () => {
       setIsLoading(true);
-      setError(null);
+      setPokemonError(null);
+      setSpeciesError(null);
       try {
         const pokemonResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
         );
         const pokemonData = await pokemonResponse.json();
         setPokemon(pokemonData);
+      } catch (err) {
+        setPokemonError(err.message);
+      }
 
+      try {
         const speciesResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`,
         );
         const speciesData = await speciesResponse.json();
         setSpecies(speciesData);
-        setIsLoading(false);
       } catch (err) {
-        setError(err.message);
+        setSpeciesError(err.message);
       } finally {
         setIsLoading(false);
       }
@@ -61,45 +67,41 @@ const PokemonDetailScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {isLoading && <ActivityIndicator size='large' />}
-      {error && (
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 10,
-            gap: 10,
-          }}
-        >
-          <Text style={{ textAlign: 'center' }}>
-            The selected pokemon is a special variant
-          </Text>
-          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>
-            Original Variant
-          </Text>
-          <PokemonCard
-            name={pokemonName.split('-')[0]}
-            url={`https://pokeapi.co/api/v2/pokemon/${pokemonName.split('-')[0]}`}
-            navigation={navigation}
-          />
-        </View>
-      )}
       <ScrollView>
-        {!error && !isLoading && (
+        {!pokemonError && (
           <View style={styles.container}>
             <View style={styles.imageContainer}>
-              <Text style={styles.id}>{padId(pokemon?.id)}</Text>
-              <Image
-                source={imageUrl}
-                style={styles.image}
-                transition={1000}
-                allowDownscaling={true}
-              />
-              <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
+              <Text style={styles.id}>{padId(pokemonId)}</Text>
+              {isLoading ? (
+                <View
+                  style={[
+                    styles.image,
+                    { alignItems: 'center', justifyContent: 'center' },
+                  ]}
+                >
+                  <ActivityIndicator size='large' />
+                </View>
+              ) : (
+                <Image
+                  source={imageUrl}
+                  style={styles.image}
+                  transition={500}
+                  allowDownscaling={true}
+                />
+              )}
+              <Text style={styles.name}>{pokemonName.toUpperCase()}</Text>
               <View style={styles.typesContainer}>
-                {pokemon &&
+                {isLoading ? (
+                  <View
+                    style={{
+                      height: 30,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ActivityIndicator size='small' />
+                  </View>
+                ) : (
                   types.map((type, index) => (
                     <View
                       key={index}
@@ -110,14 +112,17 @@ const PokemonDetailScreen = ({ route, navigation }) => {
                     >
                       <Text style={styles.typeText}>{type.toUpperCase()}</Text>
                     </View>
-                  ))}
+                  ))
+                )}
               </View>
             </View>
             <Text style={styles.stats}>Height: {height / 10} m</Text>
             <Text style={styles.stats}>Weight: {weight / 10} kg</Text>
-            <Text style={styles.description}>
-              {flavorTextEntry?.flavor_text}
-            </Text>
+            {!speciesError && (
+              <Text style={styles.description}>
+                {flavorTextEntry?.flavor_text}
+              </Text>
+            )}
           </View>
         )}
       </ScrollView>
