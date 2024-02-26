@@ -39,74 +39,78 @@ const PokemonCard = ({ name, url, navigation }) => {
     return <Text>Error: {error}</Text>;
   }
 
-  return pokemonData ? (
-    <TouchableOpacity
-      style={styles.cardContainer}
-      onPress={() => {
-        if (pokemonData) {
-          navigation.navigate('PokemonDetail', {
-            pokemonId: pokemonData.id,
-            pokemonName: name,
-            pokemonUrl: url,
-          });
-        }
-      }}
-    >
-      <View style={styles.imageContainer}>
-        <Image
-          source={pokemonData.sprites.other['official-artwork'].front_default}
-          style={styles.pokemonImage}
-          allowDownscaling={true}
-          alt={name}
-          transition={1000}
-        />
-        <View style={styles.idContainer}>
-          <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
-            {padId(pokemonData.id)}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.infoContainer}>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text style={styles.pokemonName}>{name}</Text>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            padding: 4,
-            gap: 5,
-            flexWrap: 'wrap',
+  return (
+    <>
+      {error && <Text>Error: {error}</Text>}
+      {isLoading && <SkeletonCard />}
+      {!isLoading && !error && pokemonData && (
+        <TouchableOpacity
+          style={styles.cardContainer}
+          onPress={() => {
+            navigation.navigate('PokemonDetail', {
+              pokemonId: pokemonData.id,
+              pokemonName: name,
+              pokemonUrl: url,
+            });
           }}
         >
-          {pokemonData.types.map((value) => (
-            <View
-              key={value.type.name}
-              style={{
-                backgroundColor: getBackgroundColor(value.type.name),
-                borderRadius: 7,
-                borderWidth: 2,
-                borderColor: getBackgroundColor(value.type.name),
-              }}
-            >
-              <Text
-                style={{
-                  textTransform: 'uppercase',
-                  padding: 2,
-                  color: 'white',
-                }}
-              >
-                {value.type.name}
+          <View style={styles.imageContainer}>
+            <Image
+              source={
+                pokemonData.sprites.other['official-artwork'].front_default
+              }
+              style={styles.pokemonImage}
+              allowDownscaling={true}
+              alt={name}
+              transition={1000}
+            />
+            <View style={styles.idContainer}>
+              <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
+                {padId(pokemonData.id)}
               </Text>
             </View>
-          ))}
-        </View>
-      </View>
-    </TouchableOpacity>
-  ) : (
-    <SkeletonCard />
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <Text style={styles.pokemonName}>{name}</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                padding: 4,
+                gap: 5,
+                flexWrap: 'wrap',
+              }}
+            >
+              {pokemonData.types.map((value) => (
+                <View
+                  key={value.type.name}
+                  style={{
+                    backgroundColor: getBackgroundColor(value.type.name),
+                    borderRadius: 7,
+                    borderWidth: 2,
+                    borderColor: getBackgroundColor(value.type.name),
+                  }}
+                >
+                  <Text
+                    style={{
+                      textTransform: 'uppercase',
+                      padding: 2,
+                      color: 'white',
+                    }}
+                  >
+                    {value.type.name}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 

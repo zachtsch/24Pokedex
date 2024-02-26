@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
-
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 const SkeletonCard = () => {
-  return <View style={styles.cardContainer}></View>;
+  return (
+    <View style={styles.cardContainer}>
+      <ActivityIndicator size='large' />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -13,7 +16,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     margin: 2,
     borderWidth: 1,
     borderColor: '#c9c9c9',
