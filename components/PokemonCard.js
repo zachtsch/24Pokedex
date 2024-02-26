@@ -35,10 +35,6 @@ const PokemonCard = ({ name, url, navigation }) => {
     };
   }, [name, url]);
 
-  if (isLoading) {
-    return <SkeletonCard />;
-  }
-
   if (error) {
     return <Text>Error: {error}</Text>;
   }
@@ -85,28 +81,27 @@ const PokemonCard = ({ name, url, navigation }) => {
             flexWrap: 'wrap',
           }}
         >
-          {pokemonData &&
-            pokemonData.types.map((value) => (
-              <View
-                key={value.type.name}
+          {pokemonData.types.map((value) => (
+            <View
+              key={value.type.name}
+              style={{
+                backgroundColor: getBackgroundColor(value.type.name),
+                borderRadius: 7,
+                borderWidth: 2,
+                borderColor: getBackgroundColor(value.type.name),
+              }}
+            >
+              <Text
                 style={{
-                  backgroundColor: getBackgroundColor(value.type.name),
-                  borderRadius: 7,
-                  borderWidth: 2,
-                  borderColor: getBackgroundColor(value.type.name),
+                  textTransform: 'uppercase',
+                  padding: 2,
+                  color: 'white',
                 }}
               >
-                <Text
-                  style={{
-                    textTransform: 'uppercase',
-                    padding: 2,
-                    color: 'white',
-                  }}
-                >
-                  {value.type.name}
-                </Text>
-              </View>
-            ))}
+                {value.type.name}
+              </Text>
+            </View>
+          ))}
         </View>
       </View>
     </TouchableOpacity>
