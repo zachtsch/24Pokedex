@@ -1,14 +1,17 @@
 import { FlashList } from '@shopify/flash-list';
-import { View, Text } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Card } from 'react-native-paper';
+
 import PokemonCard from './PokemonCard';
 
-const PokemonListScreen = ({ searchQuery }) => {
+const PokemonListScreen = () => {
   const [pokedexData, setPokedexData] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const navigation = useNavigation();
 
@@ -60,18 +63,38 @@ const PokemonListScreen = ({ searchQuery }) => {
         width: '100%',
       }}
     >
-      <FlashList
-        data={pokedexData}
-        renderItem={(itemData) => (
-          <PokemonCard
-            name={itemData.item.name}
-            url={itemData.item.url}
-            navigation={navigation}
-          />
-        )}
-        estimatedItemSize={250}
-        numColumns={2}
-      />
+      <Card>
+        <View
+          style={{
+            height: 50,
+            justifyContent: 'center',
+            margin: 2,
+            padding: 2,
+          }}
+        >
+          <TextInput placeholder='Search' onChangeText={setSearchQuery} />
+        </View>
+      </Card>
+      <View style={{ height: '100%', marginTop: 10 }}>
+        <FlashList
+          data={
+            searchQuery === ''
+              ? pokedexData
+              : pokedexData.filter(({ name }) => {
+                  return name.startsWith(searchQuery.toLowerCase());
+                })
+          }
+          renderItem={(itemData) => (
+            <PokemonCard
+              name={itemData.item.name}
+              url={itemData.item.url}
+              navigation={navigation}
+            />
+          )}
+          estimatedItemSize={250}
+          numColumns={2}
+        />
+      </View>
     </SafeAreaView>
   );
 };
