@@ -1,33 +1,27 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
+import PokemonListScreen from './components/PokemonListScreen';
+import PokemonDetailScreen from './components/PokemonDetailScreen';
 
-// You can import supported modules from npm
-import { Card } from 'react-native-paper';
-
-// or any files within the Snack
-import AssetExample from './components/AssetExample';
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>The App updates any time we save!</Text>
-      <Card>
-        <AssetExample />
-      </Card>
-    </View>
+    <NavigationContainer>
+      <StatusBar style='auto' />
+      <Stack.Navigator>
+        <Stack.Screen
+          name='PokemonList'
+          options={{ title: '', headerShown: false }}
+          component={PokemonListScreen}
+        />
+        <Stack.Screen
+          name='PokemonDetail'
+          options={{ headerTransparent: true }}
+          component={PokemonDetailScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
