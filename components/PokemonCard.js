@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
-import padId from '../lib/pad-id';
+
+import SkeletonCard from './ui/SkeletonCard';
+
 import getBackgroundColor from '../lib/get-background-color';
+import padId from '../lib/pad-id';
 
 const PokemonCard = ({ name, url, navigation }) => {
   const [pokemonData, setPokemonData] = useState();
@@ -33,7 +36,7 @@ const PokemonCard = ({ name, url, navigation }) => {
   }, [name, url]);
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <SkeletonCard />;
   }
 
   if (error) {
@@ -55,8 +58,10 @@ const PokemonCard = ({ name, url, navigation }) => {
       {pokemonData ? (
         <View style={styles.imageContainer}>
           <Image
-            style={styles.pokemonImage}
             source={pokemonData.sprites.other['official-artwork'].front_default}
+            style={styles.pokemonImage}
+            allowDownscaling={true}
+            alt={name}
             transition={1000}
           />
           <View style={styles.idContainer}>

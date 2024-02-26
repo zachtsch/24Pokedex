@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -67,7 +67,12 @@ const PokemonDetailScreen = ({ route, navigation }) => {
           <View style={styles.container}>
             <View style={styles.imageContainer}>
               <Text style={styles.id}>{padId(pokemon?.id)}</Text>
-              <Image source={imageUrl} style={styles.image} />
+              <Image
+                source={imageUrl}
+                style={styles.image}
+                transition={1000}
+                allowDownscaling={true}
+              />
               <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
               <View style={styles.typesContainer}>
                 {pokemon &&
