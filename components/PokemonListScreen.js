@@ -72,7 +72,12 @@ const PokemonListScreen = () => {
             padding: 2,
           }}
         >
-          <TextInput placeholder='Search' onChangeText={setSearchQuery} />
+          <TextInput
+            placeholder='Search'
+            onChangeText={(query) => {
+              setSearchQuery(query.trim());
+            }}
+          />
         </View>
       </Card>
       <View

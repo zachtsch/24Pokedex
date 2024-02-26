@@ -43,7 +43,7 @@ const PokemonCard = ({ name, url, navigation }) => {
     return <Text>Error: {error}</Text>;
   }
 
-  return (
+  return pokemonData ? (
     <TouchableOpacity
       style={styles.cardContainer}
       onPress={() => {
@@ -110,6 +110,8 @@ const PokemonCard = ({ name, url, navigation }) => {
         </View>
       </View>
     </TouchableOpacity>
+  ) : (
+    <SkeletonCard />
   );
 };
 
