@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { useEffect, useState, useRef } from 'react';
 import { Image } from 'expo-image';
 
 import SkeletonCard from './ui/SkeletonCard';
@@ -13,37 +12,10 @@ import SkeletonCard from './ui/SkeletonCard';
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 
+import usePokemon from '../hooks/usePokemon';
+
 const PokemonCard = ({ name, url, navigation }) => {
-  const [pokemonData, setPokemonData] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
-  const currentUrlRef = useRef(url);
-
-  useEffect(() => {
-    const getPokemonData = async () => {
-      setIsLoading(true);
-      setError(null);
-      if (url !== currentUrlRef.current) {
-        currentUrlRef.current = url;
-      }
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        setPokemonData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getPokemonData();
-    return () => {
-      if (pokemonData) {
-        setPokemonData(null);
-      }
-    };
-  }, [url]);
+  const { pokemonData, isLoading, error, currentUrlRef } = usePokemon(url);
 
   return (
     <>

@@ -1,44 +1,18 @@
+import { useState } from 'react';
+import { Card } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { View, Text, TextInput } from 'react-native';
-import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Card } from 'react-native-paper';
 
 import PokemonCard from './PokemonCard';
+import usePokedexData from '../hooks/usePokedex';
 
 const PokemonListScreen = () => {
-  const [pokedexData, setPokedexData] = useState();
-  const [error, setError] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const { pokedexData, isLoading, error } = usePokedexData();
   const [searchQuery, setSearchQuery] = useState('');
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const getPokedexData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(
-          'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0',
-        );
-        const data = await res.json();
-        setPokedexData(data.results);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getPokedexData();
-    return () => {
-      if (pokedexData) {
-        setPokedexData(null);
-      }
-    };
-  }, []);
 
   if (isLoading) {
     return (
