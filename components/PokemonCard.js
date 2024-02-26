@@ -1,5 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 import { Image } from 'expo-image';
 
 import SkeletonCard from './ui/SkeletonCard';
@@ -11,11 +17,15 @@ const PokemonCard = ({ name, url, navigation }) => {
   const [pokemonData, setPokemonData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+  const currentUrlRef = useRef(url);
 
   useEffect(() => {
     const getPokemonData = async () => {
       setIsLoading(true);
       setError(null);
+      if (url !== currentUrlRef.current) {
+        currentUrlRef.current = url;
+      }
       try {
         const res = await fetch(url);
         const data = await res.json();
@@ -33,11 +43,7 @@ const PokemonCard = ({ name, url, navigation }) => {
         setPokemonData(null);
       }
     };
-  }, [name, url]);
-
-  if (error) {
-    return <Text>Error: {error}</Text>;
-  }
+  }, [url]);
 
   return (
     <>
@@ -55,15 +61,19 @@ const PokemonCard = ({ name, url, navigation }) => {
           }}
         >
           <View style={styles.imageContainer}>
-            <Image
-              source={
-                pokemonData.sprites.other['official-artwork'].front_default
-              }
-              style={styles.pokemonImage}
-              allowDownscaling={true}
-              alt={name}
-              transition={1000}
-            />
+            {currentUrlRef.current !== url ? (
+              <ActivityIndicator size='large' />
+            ) : (
+              <Image
+                source={
+                  pokemonData.sprites.other['official-artwork'].front_default
+                }
+                style={styles.pokemonImage}
+                allowDownscaling={true}
+                alt={name}
+                transition={1000}
+              />
+            )}
             <View style={styles.idContainer}>
               <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
                 {padId(pokemonData.id)}
