@@ -12,6 +12,7 @@ import { Image } from 'expo-image';
 
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
+import PokemonCard from './PokemonCard';
 
 const PokemonDetailScreen = ({ route, navigation }) => {
   const [pokemon, setPokemon] = useState(null);
@@ -60,9 +61,32 @@ const PokemonDetailScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {isLoading && <ActivityIndicator size='large' />}
+      {error && (
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 10,
+            gap: 10,
+          }}
+        >
+          <Text style={{ textAlign: 'center' }}>
+            The selected pokemon is a special variant
+          </Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>
+            Original Variant
+          </Text>
+          <PokemonCard
+            name={pokemonName.split('-')[0]}
+            url={`https://pokeapi.co/api/v2/pokemon/${pokemonName.split('-')[0]}`}
+            navigation={navigation}
+          />
+        </View>
+      )}
       <ScrollView>
-        {isLoading && <ActivityIndicator size='large' />}
-        {error && <Text>Error: {error}</Text>}
         {!error && !isLoading && (
           <View style={styles.container}>
             <View style={styles.imageContainer}>

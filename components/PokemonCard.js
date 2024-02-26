@@ -51,6 +51,7 @@ const PokemonCard = ({ name, url, navigation }) => {
           navigation.navigate('PokemonDetail', {
             pokemonId: pokemonData.id,
             pokemonName: name,
+            pokemonUrl: url,
           });
         }
       }}
