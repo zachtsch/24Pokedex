@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 
+import { Image } from 'expo-image';
+
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 
-// we will hard code different types exp pokemonid = to test the
 const PokemonDetailScreen = ({ route, navigation }) => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
@@ -20,8 +20,6 @@ const PokemonDetailScreen = ({ route, navigation }) => {
   const [error, setError] = useState();
 
   const { pokemonId, pokemonName } = route.params;
-
-  //Can someone please add error handling for this fetch request???
 
   useEffect(() => {
     navigation.setOptions({ title: pokemonName.toUpperCase() });
@@ -48,11 +46,9 @@ const PokemonDetailScreen = ({ route, navigation }) => {
         setIsLoading(false);
       }
     };
-    //calling our
+
     fetchPokemonData();
   }, [pokemonId, navigation, pokemonName]);
-
-  // this is whhere we are fetching the data
 
   const imageUrl = pokemon?.sprites?.other['official-artwork'].front_default;
   const height = pokemon?.height;
@@ -62,29 +58,16 @@ const PokemonDetailScreen = ({ route, navigation }) => {
     (entry) => entry.language.name === 'en',
   );
 
-  //we have safe view for protecting the top notches on iphones
-  //we must have the app scrollable to fit all devices/ ipads tablets ect
-  // to do -> add navigation to the pokemon page
-  //todo -> figure out why scroll view and safearea view only work when loaded in app.js
-  //we need this component to not rely on app.js in any way to be shown ( self contained)
-
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
+      <ScrollView>
         {isLoading && <ActivityIndicator size='large' />}
         {error && <Text>Error: {error}</Text>}
         {!error && !isLoading && (
           <View style={styles.container}>
             <View style={styles.imageContainer}>
               <Text style={styles.id}>{padId(pokemon?.id)}</Text>
-              <Image source={{ uri: imageUrl }} style={styles.image} />
+              <Image source={imageUrl} style={styles.image} />
               <Text style={styles.name}>{species?.name.toUpperCase()}</Text>
               <View style={styles.typesContainer}>
                 {pokemon &&
@@ -108,7 +91,7 @@ const PokemonDetailScreen = ({ route, navigation }) => {
             </Text>
           </View>
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

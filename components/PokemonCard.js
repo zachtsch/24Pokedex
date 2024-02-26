@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import padId from '../lib/pad-id';
 import getBackgroundColor from '../lib/get-background-color';
 
@@ -56,9 +56,8 @@ const PokemonCard = ({ name, url, navigation }) => {
         <View style={styles.imageContainer}>
           <Image
             style={styles.pokemonImage}
-            source={{
-              uri: pokemonData.sprites.other['official-artwork'].front_default,
-            }}
+            source={pokemonData.sprites.other['official-artwork'].front_default}
+            transition={1000}
           />
           <View style={styles.idContainer}>
             <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
