@@ -1,21 +1,24 @@
-const getPokeIDFromUrl = (url) => {
-  const urlSegments = url.split('/');
-  const pokeID = urlSegments.pop() || urlSegments.pop();
-  return pokeID;
-};
-
 const getEvoData = async (url) => {
   const evos = [];
   const evoResponse = await fetch(url);
   const evoData = await evoResponse.json();
 
-  const traverseChain = (node, level) => {
-    if (evos[level] == undefined) evos[level] = [];
-    evos[level].push(getPokeIDFromUrl(node.species.url));
-    node.evolves_to, forEach((child) => traverseChain(child, level + 1));
-  };
+  const evoURL1 = evoData.chain.species.url;
+  const evoURL2 = evoData.chain.evolves_to[0].species.url;
+  const evoURL3 = evoData.chain.evolves_to[0].evolves_to[0].species.url;
 
-  traverseChain(evoData.chain, 0);
+  const sp1Response = await fetch(evoURL1);
+  const sp1Data = await sp1Response.json();
+  evos.push(sp1Data.id)
+
+  const sp2Response = await fetch(evoURL2);
+  const sp2Data = await sp2Response.json();
+  evos.push(sp2Data.id)
+
+  const sp3Response = await fetch(evoURL3);
+  const sp3Data = await sp3Response.json();
+  evos.push(sp3Data.id)
+
 
   return evos;
 };
