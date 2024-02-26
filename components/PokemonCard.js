@@ -9,7 +9,7 @@ import padId from '../lib/pad-id';
 
 const PokemonCard = ({ name, url, navigation }) => {
   const [pokemonData, setPokemonData] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -56,26 +56,20 @@ const PokemonCard = ({ name, url, navigation }) => {
         }
       }}
     >
-      {pokemonData ? (
-        <View style={styles.imageContainer}>
-          <Image
-            source={pokemonData.sprites.other['official-artwork'].front_default}
-            style={styles.pokemonImage}
-            allowDownscaling={true}
-            alt={name}
-            transition={1000}
-          />
-          <View style={styles.idContainer}>
-            <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
-              {padId(pokemonData.id)}
-            </Text>
-          </View>
+      <View style={styles.imageContainer}>
+        <Image
+          source={pokemonData.sprites.other['official-artwork'].front_default}
+          style={styles.pokemonImage}
+          allowDownscaling={true}
+          alt={name}
+          transition={1000}
+        />
+        <View style={styles.idContainer}>
+          <Text style={{ fontSize: 12, color: 'grey', fontWeight: 'bold' }}>
+            {padId(pokemonData.id)}
+          </Text>
         </View>
-      ) : (
-        <View style={styles.cardContainer}>
-          <View style={styles.imageContainer}></View>
-        </View>
-      )}
+      </View>
       <View style={styles.infoContainer}>
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text style={styles.pokemonName}>{name}</Text>
