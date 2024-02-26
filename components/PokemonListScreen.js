@@ -22,7 +22,9 @@ const PokemonListScreen = () => {
     if (query === '') {
       setFilteredData(pokedexData);
     } else {
-      const filtered = pokedexData.filter(({ name }) => name.startsWith(query));
+      const filtered = pokedexData.filter(
+        ({ name, id }) => name.startsWith(query) || id.startsWith(query),
+      );
       setFilteredData(filtered);
     }
   };
