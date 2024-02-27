@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import PokemonCard from './PokemonCard';
-import usePokedexData from '../hooks/usePokedex';
+import usePokedexData from '../hooks/dataFetching/usePokedex';
 import SearchBar from './SearchBar';
 import SkeletonCard from './ui/SkeletonCard';
 

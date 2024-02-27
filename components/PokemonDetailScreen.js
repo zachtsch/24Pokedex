@@ -1,130 +1,71 @@
-import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 
 import { Image } from 'expo-image';
 
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
+import usePokemonSpecies from '../hooks/dataFetching/usePokemonSpecies';
+import { GLOBAL_LANGUAGE } from '../lib/constants';
 
-const PokemonDetailScreen = ({ route, navigation }) => {
-  const [pokemon, setPokemon] = useState(null);
-  const [species, setSpecies] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pokemonError, setPokemonError] = useState();
-  const [speciesError, setSpeciesError] = useState();
+const PokemonDetailScreen = ({ route }) => {
+  const { pokemonData } = route.params;
 
-  const { pokemonId, pokemonName } = route.params;
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: pokemonName.replace('-', ' ').toUpperCase(),
-    });
-
-    const fetchPokemonData = async () => {
-      setIsLoading(true);
-      setPokemonError(null);
-      setSpeciesError(null);
-      try {
-        const pokemonResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
-        );
-        const pokemonData = await pokemonResponse.json();
-        setPokemon(pokemonData);
-      } catch (err) {
-        setPokemonError(err.message);
-      }
-
-      try {
-        const speciesResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`,
-        );
-        const speciesData = await speciesResponse.json();
-        setSpecies(speciesData);
-      } catch (err) {
-        setSpeciesError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPokemonData();
-  }, [pokemonId, navigation, pokemonName]);
-
-  const imageUrl = pokemon?.sprites?.other['official-artwork'].front_default;
-  const height = pokemon?.height;
-  const weight = pokemon?.weight;
-  const types = pokemon?.types.map((typeInfo) => typeInfo.type.name);
-  const flavorTextEntry = species?.flavor_text_entries.find(
-    (entry) => entry.language.name === 'en',
+  const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
+    pokemonData.species.url,
   );
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
-        {!pokemonError && (
-          <View style={styles.container}>
-            <View style={styles.imageContainer}>
-              <Text style={styles.id}>{padId(pokemonId)}</Text>
-              {isLoading ? (
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <Text style={styles.id}>{padId(pokemonData.id)}</Text>
+            <Image
+              source={
+                pokemonData.sprites.other['official-artwork'].front_default
+              }
+              style={styles.image}
+              transition={500}
+              allowDownscaling={true}
+            />
+            <Text style={styles.name}>{pokemonData.name.toUpperCase()}</Text>
+            <View style={styles.typesContainer}>
+              {pokemonData.types.map((typeInfo, index) => (
                 <View
+                  key={index}
                   style={[
-                    styles.image,
-                    { alignItems: 'center', justifyContent: 'center' },
+                    styles.typeBanner,
+                    {
+                      backgroundColor: getBackgroundColor(typeInfo.type.name),
+                    },
                   ]}
                 >
-                  <ActivityIndicator size='large' />
+                  <Text style={styles.typeText}>
+                    {typeInfo.type.name.toUpperCase()}
+                  </Text>
                 </View>
-              ) : (
-                <Image
-                  source={imageUrl}
-                  style={styles.image}
-                  transition={500}
-                  allowDownscaling={true}
-                />
-              )}
-              <Text style={styles.name}>{pokemonName.toUpperCase()}</Text>
-              <View style={styles.typesContainer}>
-                {isLoading ? (
-                  <View
-                    style={{
-                      height: 30,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <ActivityIndicator size='small' />
-                  </View>
-                ) : (
-                  types.map((type, index) => (
-                    <View
-                      key={index}
-                      style={[
-                        styles.typeBanner,
-                        { backgroundColor: getBackgroundColor(type) },
-                      ]}
-                    >
-                      <Text style={styles.typeText}>{type.toUpperCase()}</Text>
-                    </View>
-                  ))
-                )}
-              </View>
+              ))}
             </View>
-            <Text style={styles.stats}>Height: {height / 10} m</Text>
-            <Text style={styles.stats}>Weight: {weight / 10} kg</Text>
-            {!speciesError && (
-              <Text style={styles.description}>
-                {flavorTextEntry?.flavor_text}
+            <Text style={styles.stats}>
+              Height: {pokemonData.height / 10} m
+            </Text>
+            <Text style={styles.stats}>
+              Weight: {pokemonData.weight / 10} kg
+            </Text>
+            <View>
+              <Text>
+                {error && `Error: ${error}`}
+                {isLoading && `Loading...`}
+                {!isLoading &&
+                  !error &&
+                  pokemonSpecies &&
+                  pokemonSpecies.flavor_text_entries.filter(
+                    ({ language }) => language.name === GLOBAL_LANGUAGE,
+                  )[0].flavor_text}
               </Text>
-            )}
+            </View>
           </View>
-        )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

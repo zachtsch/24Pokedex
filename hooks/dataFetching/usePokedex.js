@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import getIdFromUrl from '../lib/get-id-from-url';
+import getIdFromUrl from '../../lib/get-id-from-url';
 
 const usePokedex = () => {
   const [pokedexData, setPokedexData] = useState();

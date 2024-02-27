@@ -7,7 +7,7 @@ import SkeletonCard from './ui/SkeletonCard';
 import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 
-import usePokemon from '../hooks/usePokemon';
+import usePokemon from '../hooks/dataFetching/usePokemon';
 
 const PokemonCard = ({ name, url, navigation }) => {
   const { pokemonData, isLoading, error } = usePokemon(url);
@@ -20,9 +20,7 @@ const PokemonCard = ({ name, url, navigation }) => {
         <PressableCard
           onPress={() => {
             navigation.navigate('PokemonDetail', {
-              pokemonId: pokemonData.id,
-              pokemonName: name,
-              pokemonUrl: url,
+              pokemonData: pokemonData,
             });
           }}
         >
