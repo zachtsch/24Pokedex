@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import PokemonCard from './PokemonCard';
 import usePokedexData from '../hooks/usePokedex';
 import SearchBar from './SearchBar';
+import SkeletonCard from './ui/SkeletonCard';
 
 const PokemonListScreen = () => {
   const { pokedexData, isLoading, error } = usePokedexData();
@@ -29,22 +30,6 @@ const PokemonListScreen = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View>
-        <Text>Error: {error}</Text>
-      </View>
-    );
-  }
-
   return (
     <SafeAreaView
       style={{
@@ -53,23 +38,27 @@ const PokemonListScreen = () => {
       }}
     >
       <SearchBar onSearchQueryChange={handleSearchQueryChange} />
-      <View
-        style={{ height: '100%', marginTop: 10 }}
-        showsHorizontalScrollIndicator={false}
-      >
-        <FlashList
-          data={filteredData}
-          renderItem={(itemData) => (
-            <PokemonCard
-              name={itemData.item.name.replace('-', ' ')}
-              url={itemData.item.url}
-              navigation={navigation}
-            />
-          )}
-          estimatedItemSize={250}
-          numColumns={2}
-        />
-      </View>
+      {error && <Text>Error: {error}</Text>}
+      {isLoading && Array(20).map(() => <SkeletonCard isLoading={isLoading} />)}
+      {pokedexData && (
+        <View
+          style={{ height: '100%', marginTop: 10 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <FlashList
+            data={filteredData}
+            renderItem={(itemData) => (
+              <PokemonCard
+                name={itemData.item.name.replace('-', ' ')}
+                url={itemData.item.url}
+                navigation={navigation}
+              />
+            )}
+            estimatedItemSize={250}
+            numColumns={2}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
