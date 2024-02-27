@@ -7,12 +7,13 @@ import padId from '../lib/pad-id';
 import usePokemonSpecies from '../hooks/dataFetching/usePokemonSpecies';
 import { GLOBAL_LANGUAGE } from '../lib/constants';
 
-const PokemonDetailScreen = ({ route }) => {
+const PokemonInfoScreen = ({ route }) => {
   const { pokemonData } = route.params;
 
-  const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
-    pokemonData.species.url,
-  );
+  const pokemonSpeciesUrl = pokemonData.species.url;
+
+  const { pokemonSpecies, isLoading, error } =
+    usePokemonSpecies(pokemonSpeciesUrl);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -52,17 +53,24 @@ const PokemonDetailScreen = ({ route }) => {
             <Text style={styles.stats}>
               Weight: {pokemonData.weight / 10} kg
             </Text>
-            <View>
-              <Text>
-                {error && `Error: ${error}`}
-                {isLoading && `Loading...`}
-                {!isLoading &&
-                  !error &&
-                  pokemonSpecies &&
-                  pokemonSpecies.flavor_text_entries.filter(
-                    ({ language }) => language.name === GLOBAL_LANGUAGE,
-                  )[0].flavor_text}
-              </Text>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 150,
+              }}
+            >
+              {error && <Text>Error : {error}</Text>}
+              {isLoading && <Text>Loading...</Text>}
+              {!error && !isLoading && pokemonSpecies && (
+                <Text>
+                  {pokemonSpecies &&
+                    pokemonSpecies.flavor_text_entries.filter(
+                      ({ language }) => language.name === GLOBAL_LANGUAGE,
+                    )[0].flavor_text}
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -130,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PokemonDetailScreen;
+export default PokemonInfoScreen;
