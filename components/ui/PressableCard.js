@@ -1,10 +1,10 @@
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
-const SkeletonCard = ({ isLoading }) => {
+const PressableCard = ({ onPress, children }) => {
   return (
-    <View style={styles.cardContainer}>
-      {isLoading && <ActivityIndicator size='large' />}
-    </View>
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+      {children}
+    </TouchableOpacity>
   );
 };
 
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SkeletonCard;
+export default PressableCard;
