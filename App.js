@@ -30,7 +30,6 @@ export default function App() {
   fetchPokeData();
 
   return (
-<<<<<<< HEAD
     <NavigationContainer>
       <StatusBar style='auto' />
       <Stack.Navigator>
@@ -46,13 +45,5 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
-=======
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>The App updates any time we save!</Text>
-      <Card>
-        <EvoChain species={species} />
-      </Card>
-    </View>
->>>>>>> feature/EvoComponent
   );
 }
