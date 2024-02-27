@@ -64,7 +64,13 @@ const PokemonInfoScreen = ({ route }) => {
               {error && <Text>Error : {error}</Text>}
               {isLoading && <Text>Loading...</Text>}
               {!error && !isLoading && pokemonSpecies && (
-                <Text>
+                <Text
+                  style={{
+                    flexWrap: 'wrap',
+                    flexDirection: 'row',
+                    width: '100%',
+                  }}
+                >
                   {pokemonSpecies &&
                     pokemonSpecies.flavor_text_entries.filter(
                       ({ language }) => language.name === GLOBAL_LANGUAGE,

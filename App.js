@@ -12,23 +12,7 @@ import {
 
 const Stack = createNativeStackNavigator();
 
-import EvoChain from './components/EvoChain';
-import { useEffect, useState } from 'react';
-
 export default function App() {
-  const pokemonID = 4;
-  const [species, setSpecies] = useState([]);
-
-  const fetchPokeData = async () => {
-    const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${pokemonID}`,
-    );
-    const speciesData = await speciesResponse.json();
-    setSpecies(speciesData);
-  };
-
-  fetchPokeData();
-
   return (
     <NavigationContainer>
       <StatusBar style='auto' />
