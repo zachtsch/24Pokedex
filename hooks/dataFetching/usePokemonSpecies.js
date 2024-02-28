@@ -11,10 +11,16 @@ const usePokemonSpecies = (id) => {
       setError(null);
       try {
         const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/${id}`,
+          `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
         );
         const data = await res.json();
-        setPokemonSpecies(data);
+
+        const evoChainUrl = data.evolution_chain.url;
+
+        const chainRes = await fetch(evoChainUrl);
+
+        const chainData = await chainRes.json();
+        setPokemonSpecies({ ...data, ...chainData });
       } catch (err) {
         setError(err.message);
       } finally {
@@ -25,32 +31,6 @@ const usePokemonSpecies = (id) => {
     getPokemonSpecies();
   }, [id]);
 
-  useEffect(() => {
-    const evoChainUpdate = async () => {
-      if (!pokemonSpecies) {
-        return;
-      }
-      setIsLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(
-          `https://pokeapi.co/api/v2/evolution-chain/${id}/`,
-        );
-        const data = await res.json();
-        setPokemonSpecies((prevState) => {
-          return {
-            ...prevState,
-            ...data,
-          };
-        });
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    evoChainUpdate();
-  }, [id]);
   return { pokemonSpecies, isLoading, error };
 };
 
