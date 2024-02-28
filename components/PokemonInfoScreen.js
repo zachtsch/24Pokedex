@@ -13,10 +13,9 @@ const PokemonInfoScreen = ({ route, navigation }) => {
   const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
     pokemonData.id,
   );
-
+  const pokemonName = pokemonData.name.replaceAll('-', ' ');
   useEffect(() => {
-    pokemonData &&
-      navigation.setOptions({ title: pokemonData.name.toUpperCase() });
+    pokemonData && navigation.setOptions({ title: pokemonName.toUpperCase() });
   }, [pokemonData]);
 
   return (
@@ -33,7 +32,7 @@ const PokemonInfoScreen = ({ route, navigation }) => {
               transition={500}
               allowDownscaling={true}
             />
-            <Text style={styles.name}>{pokemonData.name.toUpperCase()}</Text>
+            <Text style={styles.name}>{pokemonName.toUpperCase()}</Text>
             <View style={styles.typesContainer}>
               {pokemonData.types.map((typeInfo, index) => (
                 <View
