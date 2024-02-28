@@ -77,9 +77,12 @@ const PokemonInfoScreen = ({ route }) => {
                   {pokemonSpecies &&
                     pokemonSpecies.flavor_text_entries.filter(
                       ({ language }) => language.name === GLOBAL_LANGUAGE,
-                    )[0].flavor_text}
+                    )[0]?.flavor_text}
                 </Text>
-                <EvoChain chainData={pokemonSpecies.chain} />
+                <EvoChain
+                  chainData={pokemonSpecies.chain}
+                  parentId={pokemonData.id}
+                />
               </>
             )}
           </View>
