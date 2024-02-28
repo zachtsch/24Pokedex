@@ -9,11 +9,9 @@ import { GLOBAL_LANGUAGE } from '../lib/constants';
 
 const PokemonInfoScreen = ({ route }) => {
   const { pokemonData } = route.params;
-
-  const pokemonSpeciesUrl = pokemonData.species.url;
-
-  const { pokemonSpecies, isLoading, error } =
-    usePokemonSpecies(pokemonSpeciesUrl);
+  const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
+    pokemonData.id,
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>

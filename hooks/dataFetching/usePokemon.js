@@ -1,20 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 
-const usePokemon = (url) => {
+const usePokemon = (id) => {
   const [pokemonData, setPokemonData] = useState();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-  const currentUrlRef = useRef(url);
+  const currentIdRef = useRef(id);
 
   useEffect(() => {
     const getPokemonData = async () => {
-      if (url !== currentUrlRef.current) {
-        currentUrlRef.current = url;
+      if (id !== currentIdRef.current) {
+        currentIdRef.current = id;
       }
       setIsLoading(true);
       setError(null);
       try {
-        const res = await fetch(url);
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+
         const data = await res.json();
         setPokemonData(data);
       } catch (err) {
@@ -30,9 +31,9 @@ const usePokemon = (url) => {
         setPokemonData(null);
       }
     };
-  }, [url]);
+  }, [id]);
 
-  return { pokemonData, isLoading, error, currentUrlRef };
+  return { pokemonData, isLoading, error };
 };
 
 export default usePokemon;
