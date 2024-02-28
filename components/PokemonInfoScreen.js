@@ -7,12 +7,17 @@ import padId from '../lib/pad-id';
 import usePokemonSpecies from '../hooks/dataFetching/usePokemonSpecies';
 import { GLOBAL_LANGUAGE } from '../lib/constants';
 import EvoChain from './EvoChain';
-
-const PokemonInfoScreen = ({ route }) => {
+import { useEffect } from 'react';
+const PokemonInfoScreen = ({ route, navigation }) => {
   const { pokemonData } = route.params;
   const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
     pokemonData.id,
   );
+
+  useEffect(() => {
+    pokemonData &&
+      navigation.setOptions({ title: pokemonData.name.toUpperCase() });
+  }, [pokemonData]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -56,7 +61,7 @@ const PokemonInfoScreen = ({ route }) => {
           <View
             style={{
               flex: 1,
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
               alignItems: 'center',
               height: '100%',
               width: '100%',
@@ -71,13 +76,17 @@ const PokemonInfoScreen = ({ route }) => {
                     flexWrap: 'wrap',
                     textAlign: 'center',
                     flexDirection: 'row',
-                    width: '100%',
+                    width: '80%',
                   }}
                 >
                   {pokemonSpecies &&
-                    pokemonSpecies.flavor_text_entries.filter(
-                      ({ language }) => language.name === GLOBAL_LANGUAGE,
-                    )[0]?.flavor_text}
+                    pokemonSpecies.flavor_text_entries
+                      .filter(
+                        ({ language }) => language.name === GLOBAL_LANGUAGE,
+                      )[0]
+                      ?.flavor_text.replace(/\n/g, ' ')
+                      .replace(/\s+/g, ' ')
+                      .trim()}
                 </Text>
                 <EvoChain
                   chainData={pokemonSpecies.chain}
