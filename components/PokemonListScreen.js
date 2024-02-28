@@ -1,29 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import PokemonCard from './PokemonCard';
-import usePokedexData from '../hooks/dataFetching/usePokedex';
+
 import SearchBar from './SearchBar';
 import SkeletonCard from './ui/SkeletonCard';
+import { PokemonDataContext } from '../contexts/PokemonDataContext';
 
 const PokemonListScreen = () => {
-  const { pokedexData, isLoading, error } = usePokedexData();
+  const pokemonCtx = useContext(PokemonDataContext);
+  const { pokemonData, isLoading, error } = pokemonCtx;
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    setFilteredData(pokedexData);
-  }, [pokedexData]);
+    setFilteredData(pokemonData);
+  }, [pokemonData]);
 
   const navigation = useNavigation();
 
   const handleSearchQueryChange = (query) => {
     if (query === '') {
-      setFilteredData(pokedexData);
+      setFilteredData(pokemonData);
     } else {
-      const filtered = pokedexData.filter(
+      const filtered = pokemonData.filter(
         ({ name, id }) => name.startsWith(query) || id.startsWith(query),
       );
       setFilteredData(filtered);
@@ -40,7 +41,7 @@ const PokemonListScreen = () => {
       <SearchBar onSearchQueryChange={handleSearchQueryChange} />
       {error && <Text>Error: {error}</Text>}
       {isLoading && Array(20).map(() => <SkeletonCard isLoading={isLoading} />)}
-      {pokedexData && (
+      {pokemonData && (
         <View
           style={{ height: '100%', marginTop: 10 }}
           showsHorizontalScrollIndicator={false}
@@ -51,6 +52,7 @@ const PokemonListScreen = () => {
               <PokemonCard
                 name={itemData.item.name.replace('-', ' ')}
                 url={itemData.item.url}
+                id={itemData.item.id}
                 navigation={navigation}
               />
             )}

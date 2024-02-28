@@ -6,14 +6,13 @@ import getBackgroundColor from '../lib/get-background-color';
 import padId from '../lib/pad-id';
 import usePokemonSpecies from '../hooks/dataFetching/usePokemonSpecies';
 import { GLOBAL_LANGUAGE } from '../lib/constants';
+import EvoChain from './EvoChain';
 
 const PokemonInfoScreen = ({ route }) => {
   const { pokemonData } = route.params;
-
-  const pokemonSpeciesUrl = pokemonData.species.url;
-
-  const { pokemonSpecies, isLoading, error } =
-    usePokemonSpecies(pokemonSpeciesUrl);
+  const { pokemonSpecies, isLoading, error } = usePokemonSpecies(
+    pokemonData.id,
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -53,20 +52,24 @@ const PokemonInfoScreen = ({ route }) => {
             <Text style={styles.stats}>
               Weight: {pokemonData.weight / 10} kg
             </Text>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 150,
-              }}
-            >
-              {error && <Text>Error : {error}</Text>}
-              {isLoading && <Text>Loading...</Text>}
-              {!error && !isLoading && pokemonSpecies && (
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            {error && <Text>Error : {error}</Text>}
+            {isLoading && <Text>Loading...</Text>}
+            {!error && !isLoading && pokemonSpecies && (
+              <>
                 <Text
                   style={{
                     flexWrap: 'wrap',
+                    textAlign: 'center',
                     flexDirection: 'row',
                     width: '100%',
                   }}
@@ -76,8 +79,9 @@ const PokemonInfoScreen = ({ route }) => {
                       ({ language }) => language.name === GLOBAL_LANGUAGE,
                     )[0].flavor_text}
                 </Text>
-              )}
-            </View>
+                <EvoChain chainData={pokemonSpecies.chain} />
+              </>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -90,13 +94,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    padding: 20,
+    height: '100%',
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    margin: 20,
+    alignItems: 'center',
   },
   imageContainer: {
     backgroundColor: '#e0e0e0',
-    borderRadius: 10,
-    padding: 20,
     marginBottom: 20,
+    padding: 20,
     alignItems: 'center',
   },
   image: {

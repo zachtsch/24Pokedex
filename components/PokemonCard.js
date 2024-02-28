@@ -9,9 +9,8 @@ import padId from '../lib/pad-id';
 
 import usePokemon from '../hooks/dataFetching/usePokemon';
 
-const PokemonCard = ({ name, url, navigation }) => {
-  const { pokemonData, isLoading, error } = usePokemon(url);
-
+const PokemonCard = ({ name, id, navigation }) => {
+  const { pokemonData, isLoading, error } = usePokemon(id);
   return (
     <>
       {error && <Text>Error: {error}</Text>}

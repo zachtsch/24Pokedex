@@ -1,25 +1,34 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { getEvoData } from './EvoUtil';
+import getIdFromUrl from '../lib/get-id-from-url';
 
-const EvoChain = ({ species }) => {
-  const [evoInfo, setEvoInfo] = useState([]);
+const NextImage = ({ chainData, first }) => {
+  if (!chainData) {
+    return null;
+  }
+  return (
+    <>
+      {!first && <Text>{`->`}</Text>}
+      <Image
+        source={{
+          uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getIdFromUrl(chainData.species.url)}.png`,
+        }}
+        style={styles.evoSprite}
+      />
+      <NextImage chainData={chainData.evolves_to[0]} />
+    </>
+  );
+};
 
-  useEffect(() => {
-    const getEvoInfo = async () => {
-      setEvoInfo(await getEvoData(species.evolution_chain.url));
-    };
-    getEvoInfo();
-  }, [species]);
+const EvoChain = ({ chainData }) => {
+  if (!chainData) {
+    return null;
+  }
 
   return (
     <View style={styles.pokeEvo}>
       <Text style={styles.text}>Evolution </Text>
       <View style={styles.evoRow}>
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[0]}.png`}} style={styles.evoSprite}/> 
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[1]}.png`}} style={styles.evoSprite}/>
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[2]}.png`}} style={styles.evoSprite}/>
+        <NextImage chainData={chainData} first={true} />
       </View>
     </View>
   );
@@ -27,38 +36,29 @@ const EvoChain = ({ species }) => {
 
 const styles = StyleSheet.create({
   pokeEvo: {
-    marginBottom: 0,
     height: 145,
+    width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  evoContainer: {
-    
-  },
+  evoContainer: {},
   evoRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
   },
-  evoRowTwoItems: {
-    
-  },
-  evoRowMoreItems: {
-    
-  },
-  evoArrow: {
-    
-  },
-  evoArrowSpan: {
-    
-  },
-  evoItem: {
-    
-  },
-  evoSpriteContainer: {
-    
-  },
+  evoRowTwoItems: {},
+  evoRowMoreItems: {},
+  evoArrow: {},
+  evoArrowSpan: {},
+  evoItem: {},
+  evoSpriteContainer: {},
   evoSprite: {
-    width: 100,
-    height: 100,
+    width: 75,
+    height: 75,
     margin: 5,
     resizeMode: 'contain',
   },
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EvoChain; 
+export default EvoChain;
