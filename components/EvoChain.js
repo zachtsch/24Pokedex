@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import getIdFromUrl from '../lib/get-id-from-url';
 
-const NextImage = ({ chainData }) => {
+const NextImage = ({ chainData, first }) => {
   if (!chainData) {
     return null;
   }
   return (
     <>
+      {!first && <Text>{`->`}</Text>}
       <Image
         source={{
           uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getIdFromUrl(chainData.species.url)}.png`,
@@ -27,13 +28,7 @@ const EvoChain = ({ chainData }) => {
     <View style={styles.pokeEvo}>
       <Text style={styles.text}>Evolution </Text>
       <View style={styles.evoRow}>
-        <Image
-          source={{
-            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getIdFromUrl(chainData.species.url)}.png`,
-          }}
-          style={styles.evoSprite}
-        />
-        <NextImage chainData={chainData.evolves_to[0]} />
+        <NextImage chainData={chainData} first={true} />
       </View>
     </View>
   );
