@@ -20,7 +20,7 @@ We welcome contributions from the community! If you'd like to contribute to the 
 - Submit a pull request.
 
 ## Contact
-For any questions, feedback, or inquiries about the project, please contact [projectmaintainer@example.com](mailto:projectmaintainer@example.com).
+For any questions, feedback, or inquiries about the project, please contact one of the main contributors of 24Pokedex
 
 ## Disclaimer
 24Pokedex is a fan-made project and is not affiliated with or endorsed by Nintendo, The Pokémon Company, or any other related entities. All Pokémon-related content and trademarks are the property of their respective owners.
