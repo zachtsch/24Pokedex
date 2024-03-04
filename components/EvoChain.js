@@ -1,34 +1,34 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import getIdFromUrl from '../lib/get-id-from-url';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { getEvoData } from './EvoUtil';
 
-const NextImage = ({ chainData, first }) => {
-  if (!chainData) {
-    return null;
-  }
-  return (
-    <>
-      {!first && <Text>{`->`}</Text>}
-      <Image
-        source={{
-          uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getIdFromUrl(chainData.species.url)}.png`,
-        }}
-        style={styles.evoSprite}
-      />
-      <NextImage chainData={chainData.evolves_to[0]} />
-    </>
-  );
-};
+const EvoChain = ({ species, navigation }) => {
+  const [evoInfo, setEvoInfo] = useState([]);
 
-const EvoChain = ({ chainData }) => {
-  if (!chainData) {
-    return null;
-  }
+  useEffect(() => {
+    const getEvoInfo = async () => {
+      const temp = await getEvoData(species.evolution_chain.url)
+      console.log(temp);
+      setEvoInfo(temp);
+    };
+    getEvoInfo();
+  }, [species]);
 
   return (
     <View style={styles.pokeEvo}>
       <Text style={styles.text}>Evolution </Text>
       <View style={styles.evoRow}>
-        <NextImage chainData={chainData} first={true} />
+        {evoInfo.map((child, depth) => (
+          <React.Fragment key={depth}>
+            {child.map((item, index) => (
+              <TouchableOpacity style={styles.evoSpriteContainer} onPress={() => {navigation.navigate('PokemonDetail', {pokemonData: item})}}>
+                <Image key={item} style={styles.evoSprite} onClick={() => {}} source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${child[index]}.png`}}/>
+              </TouchableOpacity>
+            ))}
+            {depth !== evoInfo.length - 1 && ( <Text style={styles.text}>{`->`}</Text> )}
+          </React.Fragment>
+        ))}
       </View>
     </View>
   );
@@ -36,37 +36,38 @@ const EvoChain = ({ chainData }) => {
 
 const styles = StyleSheet.create({
   pokeEvo: {
+    marginBottom: 0,
     height: 145,
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
   },
-  evoContainer: {},
   evoRow: {
     flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 20,
+    alignItems: 'center',
   },
-  evoRowTwoItems: {},
-  evoRowMoreItems: {},
-  evoArrow: {},
-  evoArrowSpan: {},
-  evoItem: {},
-  evoSpriteContainer: {},
   evoSprite: {
-    width: 75,
-    height: 75,
+    width: 100,
+    height: 100,
     margin: 5,
     resizeMode: 'contain',
   },
+  evoSpriteContainer: {
+    width: 120,
+    height: 120,
+    margin: 5,
+    backgroundColor: 'white',
+    padding: 5,
+    borderWidth: 1,
+    borderColor: '#c9c9c9',
+    borderRadius: 10,
+  },
   text: {
     alignItems: 'center',
+    justifyContent: 'center',
     color: 'black',
     fontWeight: 'bold',
   },
 });
 
-export default EvoChain;
+export default EvoChain; 
