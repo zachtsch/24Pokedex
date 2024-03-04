@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { getEvoData } from './EvoUtil';
 
-const EvoChain = ({ species }) => {
+
+const EvoChain = ({ route }) => {
+  const { species } = route.params; 
   const [evoInfo, setEvoInfo] = useState([]);
 
   useEffect(() => {

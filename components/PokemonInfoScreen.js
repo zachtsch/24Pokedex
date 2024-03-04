@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Button, TouchableOpacity  } from 'react-native';
 
 import { Image } from 'expo-image';
 
@@ -7,7 +7,7 @@ import padId from '../lib/pad-id';
 import usePokemonSpecies from '../hooks/dataFetching/usePokemonSpecies';
 import { GLOBAL_LANGUAGE } from '../lib/constants';
 
-const PokemonInfoScreen = ({ route }) => {
+const PokemonInfoScreen = ({ route, navigation }) => {
   const { pokemonData } = route.params;
 
   const pokemonSpeciesUrl = pokemonData.species.url;
@@ -53,6 +53,12 @@ const PokemonInfoScreen = ({ route }) => {
             <Text style={styles.stats}>
               Weight: {pokemonData.weight / 10} kg
             </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EvoChain', { species: pokemonSpecies })}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to Evolution</Text>
+            </TouchableOpacity>
             <View
               style={{
                 flex: 1,
@@ -141,6 +147,17 @@ const styles = StyleSheet.create({
   description: {
     margin: 5,
     textAlign: 'center',
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#6200EE',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
 });
 
