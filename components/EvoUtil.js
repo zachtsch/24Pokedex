@@ -1,4 +1,4 @@
-import getIdFromUrl from './get-id-from-url';
+import getIdFromUrl from "../lib/get-id-from-url";
 
 const getEvoData = async (url) => {
   const evos = [[],[],[]];
