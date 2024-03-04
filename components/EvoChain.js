@@ -1,25 +1,50 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { getEvoData } from './EvoUtil';
+import getIdFromUrl from '../lib/get-id-from-url';
+import { AntDesign } from '@expo/vector-icons';
 
-const EvoChain = ({ species }) => {
-  const [evoInfo, setEvoInfo] = useState([]);
+const NextImage = ({ chainData, first, parentId }) => {
+  if (!chainData) {
+    return null;
+  }
 
-  useEffect(() => {
-    const getEvoInfo = async () => {
-      setEvoInfo(await getEvoData(species.evolution_chain.url));
-    };
-    getEvoInfo();
-  }, [species]);
+  return (
+    <>
+      {!first && <AntDesign name='arrowright' size={15} color='black' />}
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Image
+          source={{
+            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getIdFromUrl(chainData.species.url)}.png`,
+          }}
+          style={styles.evoSprite}
+        />
+        <Text
+          style={[
+            {
+              marginTop: -10,
+              fontSize: 12,
+            },
+            parentId == getIdFromUrl(chainData.species.url)
+              ? styles.activePkmn
+              : null,
+          ]}
+        >
+          {chainData.species.name.toUpperCase()}
+        </Text>
+      </View>
+      <NextImage chainData={chainData.evolves_to[0]} parentId={parentId} />
+    </>
+  );
+};
 
+const EvoChain = ({ chainData, parentId }) => {
+  if (!chainData) {
+    return null;
+  }
   return (
     <View style={styles.pokeEvo}>
       <Text style={styles.text}>Evolution </Text>
       <View style={styles.evoRow}>
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[0]}.png`}} style={styles.evoSprite}/> 
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[1]}.png`}} style={styles.evoSprite}/>
-        <Image source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoInfo[2]}.png`}} style={styles.evoSprite}/>
+        <NextImage chainData={chainData} first={true} parentId={parentId} />
       </View>
     </View>
   );
@@ -27,38 +52,32 @@ const EvoChain = ({ species }) => {
 
 const styles = StyleSheet.create({
   pokeEvo: {
-    marginBottom: 0,
     height: 145,
+    width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  evoContainer: {
-    
-  },
+  evoContainer: {},
   evoRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
   },
-  evoRowTwoItems: {
-    
+  activePkmn: {
+    fontWeight: 'bold',
   },
-  evoRowMoreItems: {
-    
-  },
-  evoArrow: {
-    
-  },
-  evoArrowSpan: {
-    
-  },
-  evoItem: {
-    
-  },
-  evoSpriteContainer: {
-    
-  },
+  evoRowTwoItems: {},
+  evoRowMoreItems: {},
+  evoArrow: {},
+  evoArrowSpan: {},
+  evoItem: {},
+  evoSpriteContainer: {},
   evoSprite: {
-    width: 100,
-    height: 100,
+    width: 75,
+    height: 75,
     margin: 5,
     resizeMode: 'contain',
   },
@@ -69,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EvoChain; 
+export default EvoChain;
