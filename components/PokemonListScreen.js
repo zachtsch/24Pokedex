@@ -50,7 +50,7 @@ const PokemonListScreen = () => {
             data={filteredData}
             renderItem={(itemData) => (
               <PokemonCard
-                name={itemData.item.name.replace('-', ' ')}
+                name={itemData.item.name.replaceAll('-', ' ')}
                 url={itemData.item.url}
                 id={itemData.item.id}
                 navigation={navigation}
