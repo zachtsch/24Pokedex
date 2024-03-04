@@ -2,9 +2,12 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { getEvoData } from './EvoUtil';
+import usePokemon from '../hooks/dataFetching/usePokemon';
+import { useNavigation } from '@react-navigation/native';
 
-const EvoChain = ({ species, navigation }) => {
+const EvoChain = ({ species }) => {
   const [evoInfo, setEvoInfo] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getEvoInfo = async () => {
@@ -22,7 +25,7 @@ const EvoChain = ({ species, navigation }) => {
         {evoInfo.map((child, depth) => (
           <React.Fragment key={depth}>
             {child.map((item, index) => (
-              <TouchableOpacity style={styles.evoSpriteContainer} onPress={() => {navigation.navigate('PokemonDetail', {pokemonData: item})}}>
+              <TouchableOpacity style={styles.evoSpriteContainer} onPress={() => {navigation.navigate('PokemonDetail', {pokemonData: usePokemon(item)})}}>
                 <Image key={item} style={styles.evoSprite} onClick={() => {}} source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${child[index]}.png`}}/>
               </TouchableOpacity>
             ))}
