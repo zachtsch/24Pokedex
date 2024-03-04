@@ -26,7 +26,7 @@ const EvoChain = ({ species }) => {
           <React.Fragment key={depth}>
             {child.map((item, index) => (
               <TouchableOpacity style={styles.evoSpriteContainer} onPress={() => {navigation.navigate('PokemonDetail', {pokemonData: usePokemon(item)})}}>
-                <Image key={item} style={styles.evoSprite} onClick={() => {}} source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${child[index]}.png`}}/>
+                <Image key={item} style={styles.evoSprite} source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${child[index]}.png`}}/>
               </TouchableOpacity>
             ))}
             {depth !== evoInfo.length - 1 && ( <Text style={styles.text}>{`->`}</Text> )}
