@@ -1,49 +1,41 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
 
-// You can import supported modules from npm
-import { Card } from 'react-native-paper';
+import PokemonListScreen from './components/PokemonListScreen';
+import PokemonInfoScreen from './components/PokemonInfoScreen';
+import * as SplashScreen from 'expo-splash-screen';
 
-// or any files within the Snack
-import AssetExample from './components/AssetExample';
+SplashScreen.preventAutoHideAsync();
 
-import EvoChain from './components/EvoChain';
-import { useEffect, useState } from 'react';
+import { PokemonDataProvider } from './contexts/PokemonDataContext';
+
+import {
+  POKEMON_LIST_SCREEN_NAME,
+  POKEMON_INFO_SCREEN_NAME,
+} from './lib/constants';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const pokemonID = 4;
-  const [species, setSpecies] = useState([]);
-
-  const fetchPokeData = async () => {
-    const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${pokemonID}`,
-    );
-    const speciesData = await speciesResponse.json();
-    setSpecies(speciesData);
-  };
-
-  fetchPokeData();
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>The App updates any time we save!</Text>
-      <Card>
-        <EvoChain species={species} />
-      </Card>
-    </View>
+    <NavigationContainer>
+      <StatusBar style='auto' />
+      <PokemonDataProvider>
+        <Stack.Navigator>
+          <Stack.Screen
+            name={POKEMON_LIST_SCREEN_NAME}
+            options={{ title: '', headerShown: false }}
+            component={PokemonListScreen}
+          />
+          <Stack.Screen
+            name={POKEMON_INFO_SCREEN_NAME}
+            options={{ headerTransparent: true }}
+            component={PokemonInfoScreen}
+          />
+        </Stack.Navigator>
+      </PokemonDataProvider>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
